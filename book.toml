@@ -1,0 +1,33 @@
+[book]
+authors = ["liuluopeng"]
+language = "zh-CN"
+# multilingual = false
+src = "src"
+title = "我的速查电子书"
+
+[output.html]
+mathjax-support = true
+additional-css = ["theme/style.css"]
+
+additional-js = [
+    "assets/mermaid.min.js",
+    "assets/mermaid-init.js",
+    "assets/custom.js",
+    # "assets/bigPicture.js",
+]
+
+[output.html.fold]
+enable = true
+level = 0
+
+[output.html.playground]
+editable = true
+copy-js = true
+line-numbers = true 
+
+[preprocessor.katex]
+after = ["links"]
+
+
+[preprocessor.mermaid]
+command = "mdbook-mermaid"

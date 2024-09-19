@@ -1,0 +1,11 @@
+.DS_Store
+target 
+testcase
+**/Cargo.lock
+**/target 
+**/.vscode 
+old 
+**/.DS_Store 
+book
+
+**/.obsidian 
