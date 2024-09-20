@@ -128,3 +128,6 @@ pub mod lc699;
 
 
 pub mod lc2569;
+
+pub mod lc2276;
+

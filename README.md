@@ -20,6 +20,44 @@
 
 
 
+### 开始解题的步骤:
+
+在`src/leetcode/mod.rs` 声明新建的文件:  
+`pub mod lc1`  
+
+创建`lc1.rs`, 然后粘贴函数的格式:  
+
+```rust
+impl Solution {
+    pub fn two_sum(nums: Vec<i32>, target: i32) -> Vec<i32> {
+
+    }
+}
+```
+
+
+然后复制这段代码:   
+
+```rust
+
+struct Solution{}
+
+#[cfg(test)]
+mod tests {
+
+    #[test]
+    fn it_works() {}
+}
+
+```
+
+
+
+
+
+
+### 快捷方式  
+
 二维数组 输入: 复制leetcode的测试用例. 
 ```rust
 let st = "[[1,2,3], [4,5,6]]";
