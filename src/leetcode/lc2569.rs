@@ -121,7 +121,7 @@ pub struct Solution {}
 
 #[cfg(test)]
 mod tests {
-    use crate::{leetcode::lc2569::Solution, util::vec_2d_leetcode};
+    use crate::{leetcode::lc2569::Solution, util::old_vec_2d_leetcode};
 
     #[test]
     fn it_works() {
@@ -130,7 +130,7 @@ mod tests {
             Solution::handle_query(
                 vec![1, 0, 1],
                 vec![0, 0, 0],
-                vec_2d_leetcode("[[1,1,1],[2,1,0],[3,0,0]]")
+                old_vec_2d_leetcode("[[1,1,1],[2,1,0],[3,0,0]]")
             )
         )
     }

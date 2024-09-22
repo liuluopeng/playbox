@@ -39,13 +39,13 @@ pub fn dijkstra(graph: Vec<Vec<(usize, usize)>>, start_node_idx: usize) {
 #[cfg(test)]
 mod tests {
 
-    use crate::util::vec_2d_leetcode;
+    use crate::util::old_vec_2d_leetcode;
 
     use super::dijkstra;
 
     #[test]
     fn it_works() {
-        let raw = vec_2d_leetcode("[[2,1,1],[2,3,1],[3,4,1]]");
+        let raw = old_vec_2d_leetcode("[[2,1,1],[2,3,1],[3,4,1]]");
         println!("raw: {:?}", raw);
 
         let size = 4;

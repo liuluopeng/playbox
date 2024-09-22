@@ -2,7 +2,7 @@ use crate::solution::Solution;
 
 #[cfg(test)]
 mod tests {
-    use crate::{solution::Solution, util::vec_2d_leetcode};
+    use crate::{solution::Solution, util::old_vec_2d_leetcode};
 
     #[test]
     fn it_works() {

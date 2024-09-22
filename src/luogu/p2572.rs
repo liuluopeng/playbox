@@ -130,12 +130,12 @@ impl SegTree {
         }
 
         // 0 ~ size - 1
-        let mid = (sl + sr) / 2;
+        let mid = (sl + sr) >> 1;
 
         println!("范围:{}-{} idx:{} 数据 {:?}", sl, sr, idx, self.tree[idx]);
 
-        Self::debug(&self, sl, mid, idx * 2);
-        Self::debug(&self, mid + 1, sr, idx * 2 + 1);
+        Self::debug(&self, sl, mid, idx << 1);
+        Self::debug(&self, mid + 1, sr, idx << 1 | 1);
     }
 
     pub fn new(data: &Vec<i32>) -> Self {
@@ -155,10 +155,10 @@ impl SegTree {
     }
 
     fn summarizing(&mut self, sl: usize, sr: usize, idx: usize) {
-        let mid = (sl + sr) / 2;
+        let mid = (sl + sr) >> 1;
 
-        let left_res = self.tree[idx * 2];
-        let right_res = self.tree[idx * 2 + 1];
+        let left_res = self.tree[idx << 1];
+        let right_res = self.tree[idx << 1 | 1];
 
         // 新的最长的连续1的长度:  左侧最长的连续1  右侧最长连续1长度  还有 [...11111][1111...]这样拼接的可能性
         let t0_longest1 = left_res.0.max(right_res.0).max(left_res.2 + right_res.1);
@@ -226,8 +226,8 @@ impl SegTree {
 
         let mid = (l + r) / 2;
 
-        Self::build(self, l, mid, idx * 2);
-        Self::build(self, mid + 1, r, idx * 2 + 1);
+        Self::build(self, l, mid, idx << 1);
+        Self::build(self, mid + 1, r, idx << 1 | 1);
 
         Self::summarizing(self, l, r, idx);
     }
@@ -246,15 +246,15 @@ impl SegTree {
             return;
         }
 
-        let mid = (sl + sr) / 2;
+        let mid = (sl + sr) >> 1;
         Self::down(self, idx, mid - sl + 1, sr - mid);
 
         if jobl <= mid {
-            Self::reset_section(self, rest, jobl, jobr, sl, mid, idx * 2);
+            Self::reset_section(self, rest, jobl, jobr, sl, mid, idx << 1);
         }
 
         if mid + 1 <= jobr {
-            Self::reset_section(self, rest, jobl, jobr, mid + 1, sr, idx * 2 + 1);
+            Self::reset_section(self, rest, jobl, jobr, mid + 1, sr, idx << 1 | 1);
         }
 
         Self::summarizing(self, sl, sr, idx);
@@ -264,15 +264,15 @@ impl SegTree {
         if self.reset_lazy[idx].is_some() {
             let rest = self.reset_lazy[idx].unwrap();
 
-            Self::lazy_update(self, idx * 2, ln, rest);
-            Self::lazy_update(self, idx * 2 + 1, rn, rest);
+            Self::lazy_update(self, idx << 1, ln, rest);
+            Self::lazy_update(self, idx << 1 | 1, rn, rest);
 
             self.reset_lazy[idx] = None;
         }
 
         if self.reverse_lazy[idx] {
-            Self::lazy_reverse(self, idx * 2, ln);
-            Self::lazy_reverse(self, idx * 2 + 1, rn);
+            Self::lazy_reverse(self, idx << 1, ln);
+            Self::lazy_reverse(self, idx << 1 | 1, rn);
 
             self.reverse_lazy[idx] = false;
         }
@@ -336,7 +336,7 @@ impl SegTree {
             return;
         }
 
-        let mid = (sl + sr) / 2;
+        let mid = (sl + sr) >> 1;
 
         // 处理两侧
         if target_idx <= mid {
@@ -348,7 +348,7 @@ impl SegTree {
                 target_idx,
                 sl,
                 mid,
-                idx * 2,
+                idx << 1,
             );
         } else {
             Self::single_set(
@@ -359,7 +359,7 @@ impl SegTree {
                 target_idx,
                 mid + 1,
                 sr,
-                idx * 2 + 1,
+                idx << 1 | 1,
             );
         }
 
@@ -372,14 +372,14 @@ impl SegTree {
             return;
         }
 
-        let mid = (sr + sl) / 2;
+        let mid = (sl + sr) >> 1;
         Self::down(self, idx, mid - sl + 1, sr - mid);
 
         if jobl <= mid {
-            Self::reverse_section(self, jobl, jobr, sl, mid, idx * 2);
+            Self::reverse_section(self, jobl, jobr, sl, mid, idx << 1);
         }
         if mid + 1 <= jobr {
-            Self::reverse_section(self, jobl, jobr, mid + 1, sr, idx * 2 + 1);
+            Self::reverse_section(self, jobl, jobr, mid + 1, sr, idx << 1 | 1);
         }
 
         Self::summarizing(self, sl, sr, idx);
@@ -399,14 +399,14 @@ impl SegTree {
 
         let mut res = 0;
 
-        let mid = (sl + sr) / 2;
+        let mid = (sl + sr) >> 1;
         Self::down(self, idx, mid - sl + 1, sr - mid);
 
         if jobl <= mid {
-            res += Self::get_1_counter(self, jobl, jobr, sl, mid, idx * 2);
+            res += Self::get_1_counter(self, jobl, jobr, sl, mid, idx << 1);
         }
         if mid + 1 <= jobr {
-            res += Self::get_1_counter(self, jobl, jobr, mid + 1, sr, idx * 2 + 1);
+            res += Self::get_1_counter(self, jobl, jobr, mid + 1, sr, idx << 1 | 1);
         }
         res
     }
@@ -427,18 +427,18 @@ impl SegTree {
             return (v.0, v.1, v.2);
         }
 
-        let mid = (sl + sr) / 2;
+        let mid = (sl + sr) >> 1;
         Self::down(self, idx, mid - sl + 1, sr - mid);
 
         if jobr <= mid {
-            return Self::get_longest_1(self, jobl, jobr, sl, mid, idx * 2);
+            return Self::get_longest_1(self, jobl, jobr, sl, mid, idx << 1);
         }
         if jobl > mid {
-            return Self::get_longest_1(self, jobl, jobr, mid + 1, sr, idx * 2 + 1);
+            return Self::get_longest_1(self, jobl, jobr, mid + 1, sr, idx << 1 | 1);
         }
 
-        let left_res = Self::get_longest_1(self, jobl, jobr, sl, mid, idx * 2);
-        let right_res = Self::get_longest_1(self, jobl, jobr, mid + 1, sr, idx * 2 + 1);
+        let left_res = Self::get_longest_1(self, jobl, jobr, sl, mid, idx << 1);
+        let right_res = Self::get_longest_1(self, jobl, jobr, mid + 1, sr, idx << 1 | 1);
 
         let long1 = (left_res.2 + right_res.1).max(left_res.0).max(right_res.0);
 

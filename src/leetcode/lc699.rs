@@ -1,17 +1,17 @@
 #[cfg(test)]
 mod tests {
-    use crate::{leetcode::lc699::Solution, util::vec_2d_leetcode};
+    use crate::{leetcode::lc699::Solution, util::old_vec_2d_leetcode};
 
     #[test]
     fn it_works() {
         assert_eq!(
             vec![2, 5, 5],
-            Solution::falling_squares(vec_2d_leetcode("[[1,2],[2,3],[6,1]]"))
+            Solution::falling_squares(old_vec_2d_leetcode("[[1,2],[2,3],[6,1]]"))
         );
 
         assert_eq!(
             vec![100, 100],
-            Solution::falling_squares(vec_2d_leetcode("[[100,100],[200,100]]"))
+            Solution::falling_squares(old_vec_2d_leetcode("[[100,100],[200,100]]"))
         );
     }
 }

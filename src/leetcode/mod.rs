@@ -131,3 +131,10 @@ pub mod lc2569;
 
 pub mod lc2276;
 
+
+pub mod lc1851;
+
+
+pub mod lc218;
+
+pub mod lc3296;
