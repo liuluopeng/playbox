@@ -20,6 +20,7 @@
     - [topo](./note/topo.md)
     - [kmp](./note/kmp.md)
     - [差分](./note/diff.md)
+    - [摩尔投票](./note/moore_vote.md)
 
 
 

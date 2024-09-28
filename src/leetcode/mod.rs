@@ -123,18 +123,33 @@ pub mod lc60;
 
 pub mod lc68;
 
-
 pub mod lc699;
-
 
 pub mod lc2569;
 
 pub mod lc2276;
 
-
 pub mod lc1851;
-
 
 pub mod lc218;
 
 pub mod lc3296;
+
+pub mod lc169;
+
+pub mod lc229; 
+
+pub mod lc850;
+
+pub mod lc391;
+
+
+pub mod lc692;
+
+
+pub mod lc526;
+
+pub mod lc691;
+
+
+pub mod lc2741;
