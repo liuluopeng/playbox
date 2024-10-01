@@ -1,5 +1,5 @@
 struct MyCalendar {
-    tree: Vec<Option<bool>>,
+    tree: Vec<Option<usize>>,
     lazy: Vec<usize>,
     size: usize,
     left_seg_addr_list: Vec<Option<usize>>,
@@ -13,7 +13,7 @@ struct MyCalendar {
 impl MyCalendar {
     fn new() -> Self {
         let my_calendar = MyCalendar {
-            tree: vec![Some(false)],
+            tree: vec![Some(0)],
             lazy: vec![0],
             left_seg_addr_list: vec![],
             right_seg_addr_list: vec![],
@@ -53,7 +53,7 @@ impl MyCalendar {
 
         if start <= l && r <= end {
             if let Some(days) = self.tree[idx] {
-                return days == true;
+                return days > 0;
             } else {
                 return false;
             }
@@ -76,10 +76,10 @@ impl MyCalendar {
         if self.lazy[idx] != 0 {
             let l_sub_idx = self.left_seg_addr_list[idx].unwrap();
             self.lazy[l_sub_idx] = mid - l + 1;
-            self.tree[l_sub_idx] = Some(true);
+            self.tree[l_sub_idx] = Some(mid - l + 1);
             let r_sub_idx = self.right_seg_addr_list[idx].unwrap();
             self.lazy[r_sub_idx] = r - mid;
-            self.tree[r_sub_idx] = Some(true);
+            self.tree[r_sub_idx] = Some(r - mid);
             self.lazy[idx] = 0;
         }
 
@@ -120,7 +120,7 @@ impl MyCalendar {
         }
         if start <= l && r <= end {
             self.lazy[idx] = r - l + 1;
-            self.tree[idx] = Some(true);
+            self.tree[idx] = Some(r - l + 1);
 
             return;
         }
@@ -142,10 +142,10 @@ impl MyCalendar {
         let r_sub_idx = self.right_seg_addr_list[idx].unwrap();
         if self.lazy[idx] != 0 {
             self.lazy[l_sub_idx] = mid - l + 1;
-            self.tree[l_sub_idx] = Some(true);
+            self.tree[l_sub_idx] = Some(mid - l + 1);
 
             self.lazy[r_sub_idx] = r - mid;
-            self.tree[r_sub_idx] = Some(true);
+            self.tree[r_sub_idx] = Some(r - mid);
             self.lazy[idx] = 0;
         }
         if start <= mid {
@@ -155,26 +155,78 @@ impl MyCalendar {
             self.add(start, end, mid + 1, r, r_sub_idx);
         }
 
-        let mut left_res = false;
+        let mut left_res = 0;
         if self.left_seg_addr_list[idx].is_some() {
             match self.tree[self.left_seg_addr_list[idx].unwrap()] {
                 None => {}
                 Some(v) => {
-                    left_res |= v;
+                    left_res += v;
                 }
             }
         }
-        let mut right_res = false;
+        let mut right_res = 0;
         if self.right_seg_addr_list[idx].is_some() {
             match self.tree[self.right_seg_addr_list[idx].unwrap()] {
                 None => {}
                 Some(v) => {
-                    right_res |= v;
+                    right_res += v;
                 }
             }
         }
 
-        self.tree[idx] = Some(left_res | right_res);
+        self.tree[idx] = Some(left_res + right_res);
+    }
+
+    fn single_change(&mut self, day_idx: usize, l: usize, r: usize, idx: usize) {
+        if idx >= self.left_seg_addr_list.len() {
+            self.left_seg_addr_list.push(None);
+            self.right_seg_addr_list.push(None);
+        }
+
+        if l == r {
+            self.tree[idx] = Some(1);
+            return;
+        }
+
+        let mut mid = (l + r) >> 1;
+
+        if day_idx <= mid {
+            if self.left_seg_addr_list[idx].is_none() {
+                self.tree.push(None);
+
+                self.left_seg_addr_list[idx] = Some(self.tree.len() - 1);
+            }
+            self.single_change(day_idx, l, mid, self.left_seg_addr_list[idx].unwrap());
+        } else {
+            if self.right_seg_addr_list[idx].is_none() {
+                self.tree.push(None);
+
+                self.right_seg_addr_list[idx] = Some(self.tree.len() - 1);
+            }
+
+            self.single_change(day_idx, mid + 1, r, self.right_seg_addr_list[idx].unwrap());
+        }
+
+        let mut left_res = 0;
+        if self.left_seg_addr_list[idx].is_some() {
+            match self.tree[self.left_seg_addr_list[idx].unwrap()] {
+                None => {}
+                Some(v) => {
+                    left_res += v;
+                }
+            }
+        }
+        let mut right_res = 0;
+        if self.right_seg_addr_list[idx].is_some() {
+            match self.tree[self.right_seg_addr_list[idx].unwrap()] {
+                None => {}
+                Some(v) => {
+                    right_res += v;
+                }
+            }
+        }
+
+        self.tree[idx] = Some(left_res + right_res);
     }
 
     fn debug(&self, idx: usize, left_resp: usize, right_resp: usize) {
