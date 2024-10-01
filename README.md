@@ -36,7 +36,7 @@ impl Solution {
 ```
 
 
-然后复制这段代码:   
+然后复制这段代码(或者更加快捷的方式:使用vs code -> 首选项 -> 配置代码片段):   
 
 ```rust
 
@@ -55,19 +55,19 @@ mod tests {
 
 
 
-
 ### 快捷方式  
 
 二维数组 输入: 复制leetcode的测试用例. 
 ```rust
-let st = "[[1,2,3], [4,5,6]]";
-let vec2d = leetcode_testcase_vec2d(st); 
-
-// ===>
-let vec2d = vec![
-    vec![1,2,3],
-    vec![4,5,6],
-]
+pub fn array2d_to_vec2d<T, const N: usize>(array: &[T; N]) -> Vec<Vec<i32>>
+where
+    T: AsRef<[i32]>, // 每一行都可以被引用为 i32 数组
+{
+    array
+        .iter()
+        .map(|row| row.as_ref().to_vec()) // 将每一行转换为 Vec<i32>
+        .collect() // 收集为 Vec<Vec<i32>>
+}
 ```
 
 二叉树题目 输入: 

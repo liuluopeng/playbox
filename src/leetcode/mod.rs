@@ -153,3 +153,25 @@ pub mod lc691;
 
 
 pub mod lc2741;
+
+
+pub mod lc1655;
+
+
+
+pub mod lc1723;
+
+
+pub mod lc1879;
+
+
+
+pub mod lc729;
+
+
+
+pub mod lc731;
+
+
+
+pub mod lc732;
