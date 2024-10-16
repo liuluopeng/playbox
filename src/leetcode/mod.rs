@@ -163,7 +163,53 @@ pub mod lc731;
 
 pub mod lc732;
 
-
+pub mod lc2192;
 
 pub mod lcr113;
 pub mod lcr114;
+
+
+pub mod lc1462;
+
+
+mod lc2642;
+
+
+
+mod lc1514;
+
+
+pub mod lc_week;
+
+
+mod lc1976;
+
+
+mod lc72; 
+
+mod lc63;
+
+mod lc279;
+
+
+mod lc152;
+
+
+mod lc131;
+
+
+mod lc56;
+
+
+mod lc41;
+
+mod lc394;
+mod leetcode_1;
+
+mod leetcode_560;
+
+mod leetcode_33;
+
+mod leetcode_438;
+
+mod leetcode_128;

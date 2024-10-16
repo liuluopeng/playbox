@@ -25,3 +25,7 @@ pub mod luogu;
 pub mod lcr;
 
 pub mod binary_indexed_tree;
+
+
+
+pub mod contest;

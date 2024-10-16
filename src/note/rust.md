@@ -1,6 +1,65 @@
 # rust
 
 
+
+
+## BinaryHeap
+在 Rust 中，`BinaryHeap` 是一个最大堆（默认情况下），用于存储元素，并且总是将最大的元素放在堆顶。`BinaryHeap` 可以用来存储任何实现了 `Ord` trait 的类型，这意味着该类型需要支持比较操作。然而，浮点数（如 `f32` 和 `f64`）没有实现 `Ord`，因为它们包含了一些无法进行全序比较的值，比如 NaN（不是一个数）。
+
+但是，如果你确定你的数据中不会出现 NaN 值，或者你对 NaN 有特定的处理方式，你可以通过创建一个包装器结构来实现自己的 `Ord` trait，从而允许使用 `BinaryHeap` 存储浮点数。
+
+下面是一个示例，展示了如何创建一个可以用于 `BinaryHeap` 的浮点数包装器：
+
+```rust
+use std::cmp::Ordering;
+use std::collections::BinaryHeap;
+
+#[derive(Clone, Copy, Eq, PartialEq, PartialOrd)]
+struct FloatWrapper(f64);
+
+impl Ord for FloatWrapper {
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.0.partial_cmp(&other.0).unwrap_or(Ordering::Equal)
+    }
+}
+
+impl PartialOrd for FloatWrapper {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+fn main() {
+    let mut heap = BinaryHeap::new();
+
+    // 插入一些浮点数
+    heap.push(FloatWrapper(3.14));
+    heap.push(FloatWrapper(2.71));
+    heap.push(FloatWrapper(1.41));
+
+    // 弹出最大的元素
+    while let Some(FloatWrapper(value)) = heap.pop() {
+        println!("{}", value);
+    }
+}
+```
+
+在这个例子中，我们定义了一个名为 `FloatWrapper` 的结构体，它包含一个 `f64` 类型的字段。然后我们为这个结构体实现了 `Ord` trait，使用了 `partial_cmp` 方法来进行比较，这可以处理浮点数之间的比较。如果 `partial_cmp` 返回 `None`（例如当比较涉及 NaN 时），我们选择返回 `Ordering::Equal`，这是一个简单的处理方式，但可能不是所有情况下的最佳选择。
+
+注意，如果你希望 `BinaryHeap` 表现为最小堆，可以简单地反转比较结果，即在 `Ord` trait 的 `cmp` 方法中返回相反的 `Ordering`：
+
+```rust
+impl Ord for FloatWrapper {
+    fn cmp(&self, other: &Self) -> Ordering {
+        other.0.partial_cmp(&self.0).unwrap_or(Ordering::Equal)
+    }
+}
+```
+
+这样，`BinaryHeap` 就会将最小的元素保持在堆顶了。
+
+
+
 ## 构建相关. cargo相关. 
 
 我的一个文件夹下面有很多rust项目, 如何快速clean这些项目的target. 我不想一个一个进去执行cargo clean?

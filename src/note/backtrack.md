@@ -57,3 +57,8 @@ impl Solution {
 ```python
 {{#include ../../py_src/rev_slice.py}}
 ```
+
+
+
+例题: 
+- [131. 分割回文串 - 力扣（LeetCode）](https://leetcode.cn/problems/palindrome-partitioning/description/?envType=study-plan-v2&envId=top-100-liked)

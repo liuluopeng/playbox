@@ -1,60 +1,34 @@
-use std::cmp::Reverse;
-use std::collections::BinaryHeap;
+use std::{cmp::Reverse, collections::BinaryHeap};
 
-pub fn dijkstra(graph: Vec<Vec<(usize, usize)>>, start_node_idx: usize) {
-    let mut dist = vec![usize::MAX; graph.len()]; // 节点start到各个节点的距离
+fn shortest_path(graph: &Vec<Vec<(usize, usize)>>, node1: i32, node2: i32) -> i32 {
+    let mut dist = vec![usize::MAX / 2; graph.len()];
     let mut visited = vec![false; graph.len()];
 
-    println!("{:?} {:?} {:?}", graph, dist, visited);
+    let mut min_heap = BinaryHeap::new();
+    dist[node1 as usize] = 0;
+    min_heap.push(Reverse((0, node1 as usize)));
 
-    // 节点start 到  start 距离是0:
-    dist[start_node_idx] = 0;
-
-    let mut heap = BinaryHeap::new();
-    heap.push(Reverse((start_node_idx, 0))); // (节点索引, 暂存的距离)
-
-    while !heap.is_empty() {
-        let Reverse((node_idx, tmp_dis)) = heap.pop().unwrap();
-        println!("pop : {:?} {:?}", node_idx, tmp_dis);
-
-        if visited[node_idx] == true {
+    while let Some(Reverse((curr_dis, curr_node))) = min_heap.pop() {
+        if visited[curr_node] {
             continue;
-        } else {
-            // visited[node_idx] == false
-            visited[node_idx] = true;
-            // dist[node_idx] = tmp_dis;
         }
-
-        // 寻找node_idx指向的各个点:
-        for &(next_idx, next_dist) in graph[node_idx].iter() {
-            if visited[next_idx] == false && dist[node_idx] + next_dist < dist[next_idx] {
-                dist[next_idx] = dist[node_idx] + next_dist;
-                heap.push(Reverse((next_idx, dist[node_idx] + next_dist)));
+        visited[curr_node] = true;
+        for &(next_node, next_dist) in &graph[curr_node] {
+            if visited[next_node] == false {
+                let refresh_dist = dist[curr_node] + next_dist;
+                if dist[next_node] > refresh_dist {
+                    dist[next_node] = refresh_dist;
+                    min_heap.push(Reverse((refresh_dist, next_node)));
+                }
             }
         }
     }
 
-    println!("算完的距离  {:?}", dist);
-}
-#[cfg(test)]
-mod tests {
+    println!("{:?}", dist);
 
-    use crate::util::old_vec_2d_leetcode;
-
-    use super::dijkstra;
-
-    #[test]
-    fn it_works() {
-        let raw = old_vec_2d_leetcode("[[2,1,1],[2,3,1],[3,4,1]]");
-        println!("raw: {:?}", raw);
-
-        let size = 4;
-        let mut graph = vec![vec![]; size];
-
-        for edge in raw {
-            graph[edge[0] as usize - 1].push((edge[1] as usize - 1, edge[2] as usize));
-        }
-
-        dijkstra(graph, 1);
+    if dist[node2 as usize] == usize::MAX / 2 {
+        -1
+    } else {
+        dist[node2 as usize] as i32
     }
 }
